@@ -38,6 +38,18 @@ tree
 ```bash
 cd face_detection/tensorflow-face-detection
 python inference_video_face.py
+cd media
+tree
+.
+├── face_image
+│   ├── A.jpg
+│   ├── B.jpg
+│   ├── C.jpg
+│   ├── D.jpg
+│   ├── E.jpg
+│   └── F.jpg
+└── test.mp4
+└── test_out.avi
 ```
 
 ## Base Implimentation
