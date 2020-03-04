@@ -16,6 +16,24 @@ tree
 └── 20180402-114759.zip
 ```
 
+# Prepare a video and images of face
+```bash
+cd face_detection/tensorflow-face-detection
+mkdir -p media/face_image
+cd media
+tree
+.
+├── face_image
+│   ├── A.jpg
+│   ├── B.jpg
+│   ├── C.jpg
+│   ├── D.jpg
+│   ├── E.jpg
+│   └── F.jpg
+└── test.mp4
+
+```
+
 # Run
 ```bash
 cd face_detection/tensorflow-face-detection
