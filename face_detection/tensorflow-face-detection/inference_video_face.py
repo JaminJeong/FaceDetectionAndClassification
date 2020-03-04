@@ -66,36 +66,6 @@ def load_tf_facenet_graph(FACENET_MODEL_PATH):
     return images_placeholder,embeddings,phase_train_placeholder
 
 
-def get_face_embeddings(sess,embeddings,images_placeholder,phase_train_placeholder,
-                        nrof_images,nrof_batches_per_epoch,FACENET_PREDICTION_BATCH_SIZE,images_array):
-  """
-
-  :param sess: Current Tensorflow session variable
-  :param embeddings: A tensor variable that holds the embeddings of the result
-  :param images_placeholder: A tensor variable that holds the images
-  :param phase_train_placeholder: A tensor variable
-  :param nrof_images: Number of detected faces
-  :param nrof_batches_per_epoch: Number of images to run per epoch
-  :param FACENET_PREDICTION_BATCH_SIZE: Number of maximum faces per facenet detection
-  :param images_array: Numpy representation of an image.
-  :return:
-  """
-  embedding_size = embeddings.get_shape()[1]
-  emb_array = np.zeros((nrof_images, embedding_size))
-
-  for i in range(nrof_batches_per_epoch):
-    start_index = i * FACENET_PREDICTION_BATCH_SIZE
-    end_index = min((i + 1) * FACENET_PREDICTION_BATCH_SIZE, nrof_images)
-    images_batch = images_array[start_index:end_index]  # Pass in several different paths
-    images_batch = np.array(images_batch)
-    feed_dict = {images_placeholder: images_batch, phase_train_placeholder: False}
-    function_timer_start = time.time()
-    emb_array[start_index:end_index, :] = sess.run(embeddings, feed_dict=feed_dict)
-    function_timer = time.time() - function_timer_start
-    print('Calculating image embedding cost: {}'.format(function_timer))
-
-  return emb_array
-
 cap = cv2.VideoCapture("./media/test.mp4")
 out = None
 
