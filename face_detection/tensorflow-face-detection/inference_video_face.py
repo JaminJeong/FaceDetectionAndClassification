@@ -96,7 +96,7 @@ def get_face_embeddings(sess,embeddings,images_placeholder,phase_train_placehold
 
   return emb_array
 
-cap = cv2.VideoCapture("./media/videoplayback.mp4")
+cap = cv2.VideoCapture("./media/test.mp4")
 out = None
 
 face_image_dic = {}
@@ -125,7 +125,7 @@ with detection_graph.as_default():
   with tf.Session(graph=detection_graph, config=config) as sess:
     frame_num = 1490;
 
-    print(f"face_image_dic : {face_image_dic}")
+    # print(f"face_image_dic : {face_image_dic}")
 
     for key in face_image_dic:
         facenet_input_image = face_image_dic[key]['image']
@@ -148,7 +148,7 @@ with detection_graph.as_default():
         category_index[idx] = {'id': idx}
         category_index[idx] = {'name': key}
 
-    print(f"category_index : {category_index}")
+    # print(f"category_index : {category_index}")
 
     while frame_num:
       frame_num -= 1
