@@ -1,7 +1,7 @@
-# FaceDetectionAndClassification
+## FaceDetectionAndClassification
 face detection and classification using tensorflow
 
-# Download model of facenet
+## Download model of facenet
 ```bash 
 cd face_recognitions/facenet/src
 bash download_and_extract.sh
@@ -16,7 +16,7 @@ tree
 └── 20180402-114759.zip
 ```
 
-# Prepare a video and images of face
+## Prepare a video and images of face
 ```bash
 cd face_detection/tensorflow-face-detection
 mkdir -p media/face_image
@@ -34,12 +34,13 @@ tree
 
 ```
 
-# Run
+## Run
 ```bash
 cd face_detection/tensorflow-face-detection
 python inference_video_face.py
 ```
 
-# Base Implimentation
+## Base Implimentation
 - https://github.com/yeephycho/tensorflow-face-detection
 - https://github.com/davidsandberg/facenet
+- https://github.com/velociraptor111/tf-deep-facial-recognition-lite
