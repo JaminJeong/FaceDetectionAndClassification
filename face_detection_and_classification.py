@@ -4,20 +4,6 @@ from common.camera import VideoCamera
 from common.Face import Face
 
 if __name__ == '__main__':
-    def draw_cv(frame, face_locations, face_names):
-        # Display the results
-        for (top, right, bottom, left), name in zip(face_locations, face_names):
-            # Draw a box around the face
-            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-
-            # Draw a label with a name below the face
-            # cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255))
-            font = cv2.FONT_HERSHEY_DUPLEX
-            cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-
-        return frame
-
     import argparse
 
     parser = argparse.ArgumentParser(prog="inference",
@@ -29,7 +15,7 @@ if __name__ == '__main__':
     cam = VideoCamera(args.INPUTVIDEO) #'./tensorflow-face-detection/media/test.mp4'
     # cam = VideoCamera('./tensorflow-face-detection/media/test.mp4')
 
-    from face_detection.face_detection_opencv import FaceDetectorCV
+    from face_detection.face_detection_opencv import FaceDetectorCV, draw_opencv
     detector_cv = FaceDetectorCV()
     from face_recognitions.face_recog_opencv import FaceRecogCV
     recog_cv = FaceRecogCV(args.FACEDIR)
@@ -40,7 +26,9 @@ if __name__ == '__main__':
         # print(f"frame shape : {frame.shape}" )
         dt_result = detector_cv.DetectROI(frame)
         recog_cv.Recog(frame, detector_cv.face_locations, dt_result)
-        draw_image = draw_cv(frame.copy(), detector_cv.face_locations, dt_result.names)
+        draw_image = draw_opencv(frame.copy(),
+                                 detector_cv.face_locations, dt_result.names,
+                                 is_draw_text=True)
 
         # show the frame
         # cv2.imshow("Frame", frame)

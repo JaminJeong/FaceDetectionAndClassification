@@ -26,7 +26,7 @@ class FaceDetectorCV(FaceDetector):
 
         return self.faceDetectedResult
 
-def draw_opencv(frame, face_locations, face_names, is_draw_text=False):
+def draw_opencv(frame, face_locations, face_names, is_draw_text=False, is_draw_text_fill=False):
     # Display the results
     for (top, right, bottom, left), name in zip(face_locations, face_names):
         # Draw a box around the face
@@ -34,7 +34,10 @@ def draw_opencv(frame, face_locations, face_names, is_draw_text=False):
 
         # Draw a label with a name below the face
         if is_draw_text:
-            cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+            if is_draw_text_fill:
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+            else:
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255))
             font = cv2.FONT_HERSHEY_DUPLEX
             cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
 
