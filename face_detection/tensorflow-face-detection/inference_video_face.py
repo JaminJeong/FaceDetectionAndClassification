@@ -68,6 +68,7 @@ def load_tf_facenet_graph(FACENET_MODEL_PATH):
 
 cap = cv2.VideoCapture("./media/test.mp4")
 out = None
+padding_rate = 0.02
 
 face_image_dic = {}
 face_file_path = './media/face_image'
@@ -165,14 +166,20 @@ with detection_graph.as_default():
       for idx, score in enumerate(scores):
           if score > 0.5 and classes[idx] == 1:
               # print(f"boxes : {boxes[idx]}")
-              y1 = int(boxes[idx][0] * image_shape[0])
-              x1 = int(boxes[idx][1] * image_shape[1])
-              y2 = int(boxes[idx][2] * image_shape[0])
-              x2 = int(boxes[idx][3] * image_shape[1])
+              y1 = int((boxes[idx][0] - padding_rate) * image_shape[0])
+              x1 = int((boxes[idx][1] - padding_rate) * image_shape[1])
+              y2 = int((boxes[idx][2] + padding_rate) * image_shape[0])
+              x2 = int((boxes[idx][3] + padding_rate) * image_shape[1])
+
+              # prevent out of range
+              y1 = max(y1, 0)
+              x1 = max(x1, 0)
+              y2 = min(y2, image_shape[0])
+              x2 = min(x2, image_shape[1])
               facenet_input_image = image[y1:y2, x1:x2, :]
               # print(f"y1 x1 y2 x2 : {y1}, {x1}, {y2}, {x2}")
               # print(f"facenet_input_image.shape : {facenet_input_image.shape}")
-              # cv2.imwrite("./media/outputfile/facenet_image_{}_{}.jpg".format(frame_num, idx), facenet_input_image)
+              cv2.imwrite("./media/outputfile/facenet_image_{}_{}.jpg".format(frame_num, idx), facenet_input_image)
               facenet_input_image = cv2.resize(facenet_input_image, (160, 160))
               facenet_input_image = facenet_input_image.astype(dtype=np.float)
               facenet_input_image = prewhiten(facenet_input_image)
@@ -192,9 +199,13 @@ with detection_graph.as_default():
                   dist_list.append(np.linalg.norm(face_image_dic[key]["embedding"] - emb_array))
 
               dist_list = np.array(dist_list)
-              classes[idx] = np.argmin(dist_list) + 2 # offset
-          else:
-              classes[idx] = 1 # unknown
+              # print(f"min(dist_list) : {min(dist_list)}")
+              if min(dist_list) < 0.85:
+                  classes[idx] = np.argmin(dist_list) + 2 # offset
+              else:
+                  classes[idx] = 1
+          # else:
+          #     classes[idx] = 1 # unknown
 
       # print(f"category_index : {category_index}")
 
