@@ -10,10 +10,17 @@ if __name__ == '__main__':
                                      description="detect face", add_help=True)
     parser.add_argument('-i', '--INPUTVIDEO', help='input video.', required=True)
     parser.add_argument('-f', '--FACEDIR', help='folder of face images.', required=True)
+    parser.add_argument('-o', '--OUTPUTDIR', help='output video.', required=True)
     args = parser.parse_args()
 
+    out = None
     cam = VideoCamera(args.INPUTVIDEO) #'./tensorflow-face-detection/media/test.mp4'
     # cam = VideoCamera('./tensorflow-face-detection/media/test.mp4')
+
+    frame = cam.get_frame()
+    if out is None:
+        [h, w] = frame.shape[:2]
+        out = cv2.VideoWriter(args.OUTPUTDIR, 0, 25.0, (w, h))
 
     from face_detection.face_detection_opencv import FaceDetectorCV, draw_opencv
     detector_cv = FaceDetectorCV()
@@ -33,6 +40,7 @@ if __name__ == '__main__':
         # show the frame
         # cv2.imshow("Frame", frame)
         cv2.imshow("Frame", draw_image)
+        out.write(draw_image)
 
         key = cv2.waitKey(1) & 0xFF
 
